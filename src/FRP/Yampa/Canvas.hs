@@ -48,7 +48,6 @@ reactimateSFinContext interpInput putCanvasOutput sf context =
 				 , eWhich = Nothing }
 
          getInput :: Bool -> IO (DTime,Maybe a)
-         getInput True = error "True"
          getInput canBlock =
             do let opt_block m = 
                             if canBlock 
