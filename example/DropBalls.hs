@@ -4,6 +4,7 @@ module DropBalls where
 
 -- set browser to: http://localhost:3000/
 import Graphics.Blank hiding (Event)
+import qualified Graphics.Blank as BC
 import FRP.Yampa
 import FRP.Yampa.Vector2
 import Data.Text(Text)
@@ -22,10 +23,10 @@ animateDroppingBalls = reactimateSFinContext clickEvent renderScene dropBalls
 
 ---------------------------------------------------
 
--- Note:
---   data Event a = NoEvent | Event a
-
-clickEvent = const NoEvent -- TODO
+clickEvent :: BC.Event -> Event (Position)
+clickEvent ev = case ePageXY ev of
+                  Nothing     -> NoEvent
+                  Just (x,y)  -> Event (vector2 0.5 0.5) -- Placeholder, TODO
 
 -- | Convert a Blank Canvas co-ordinate into a Yampa Position.
 toXYCo :: (Float,Float) -> Canvas Position
@@ -39,7 +40,7 @@ toXYCo (i,j) =
 
 -- Construct a bouncing ball model that allows responds to input events by adding new balls.
 dropBalls :: SF (Event Position) [Ball]
-dropBalls = ballGenerator >>> ballCollection []
+dropBalls = ballGenerator >>> ballCollection [bouncingBall1 ball1]
 
 ballCollection :: [SF (Event Ball) Ball] -> SF (Event Ball) [Ball]
 ballCollection bs = notYet >>> pSwitchB bs (arr fst) (\ sfs b -> ballCollection (bouncingBall1 b : sfs))
