@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings, TupleSections #-}
 
-module DropBalls where
+module Main where
 
 -- set browser to: http://localhost:3000/
 import Graphics.Blank hiding (Event)
@@ -15,7 +15,7 @@ import BouncingBalls hiding (main)
 ---------------------------------------------------
 
 main :: IO ()
-main = blankCanvas 3000 animateDroppingBalls
+main = blankCanvas 3000 { events = ["click"] } $ animateDroppingBalls
 
 -- | Display an animation of multiple falling balls.
 animateDroppingBalls :: DeviceContext -> IO ()
@@ -23,8 +23,8 @@ animateDroppingBalls = reactimateSFinContext clickEvent renderScene dropBalls
 
 ---------------------------------------------------
 
-clickEvent :: BC.Event -> Event (Position)
-clickEvent ev = case ePageXY ev of
+clickEvent :: (Float,Float) -> BC.Event -> Event (Position)
+clickEvent (h,w) ev = case ePageXY ev of
                   Nothing     -> NoEvent
                   Just (x,y)  -> Event (vector2 0.5 0.5) -- Placeholder, TODO
 

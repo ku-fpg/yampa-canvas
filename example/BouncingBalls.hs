@@ -17,7 +17,7 @@ main = blankCanvas 3000 animateBouncingBalls
 
 -- | Display an animation of multiple falling balls.
 animateBouncingBalls :: DeviceContext -> IO ()
-animateBouncingBalls = reactimateSFinContext (const ()) renderScene (bouncingBalls someBalls)
+animateBouncingBalls = reactimateSFinContext (\ _ _ -> ()) renderScene (bouncingBalls someBalls)
 
 ---------------------------------------------------
 
