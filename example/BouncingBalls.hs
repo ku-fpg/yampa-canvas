@@ -1,6 +1,6 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings, ScopedTypeVariables #-}
 
-module Main where
+module BouncingBalls where
 
 -- set browser to: http://localhost:3000/
 import Graphics.Blank hiding (Event)
@@ -13,11 +13,11 @@ import FRP.Yampa.Canvas
 ---------------------------------------------------
 
 main :: IO ()
-main = blankCanvas 3000 animateBalls
+main = blankCanvas 3000 animateBouncingBalls
 
 -- | Display an animation of multiple falling balls.
-animateBalls :: DeviceContext -> IO ()
-animateBalls = reactimateSFinContext (const ()) renderScene (bouncingBalls someBalls)
+animateBouncingBalls :: DeviceContext -> IO ()
+animateBouncingBalls = reactimateSFinContext (const ()) renderScene (bouncingBalls someBalls)
 
 ---------------------------------------------------
 
@@ -94,14 +94,14 @@ gravity = vector2 0 (-1)
 ---------------------------------------------------
 
 -- | Construct a free-falling ball from an initial ball configuration.
-fallingBall :: Ball -> SF () Ball
-fallingBall b = accelerator gravity (vel b) (pos b) >>> arr updateBall
+fallingBall :: Ball -> SF x Ball
+fallingBall b = constant gravity >>> accelerator (vel b) (pos b) >>> arr updateBall
   where
     updateBall :: (Position,Velocity) -> Ball
     updateBall (p,v) = b { pos = p, vel = v }
 
 -- | Construct a ball that bounces in one dimension from an initial ball configuration.
-bouncingBall1 :: Ball -> SF () Ball
+bouncingBall1 :: forall x. Ball -> SF x Ball
 bouncingBall1 b = switchWhen (fallingBall b) detectFloor f
   where
     detectFloor :: SF Ball (Event Ball)
@@ -110,11 +110,11 @@ bouncingBall1 b = switchWhen (fallingBall b) detectFloor f
         p :: Ball -> Bool
         p b1 = (vector2Y (pos b1) <= radius b1) || (vector2Y (pos b1) >= 1 - radius b1)
 
-    f :: Ball -> SF () Ball
+    f :: Ball -> SF x Ball
     f b2 = bouncingBall1 (negateYVel b2)
 
 -- | Construct a ball that bounces in two dimensions.
-bouncingBall2 :: Ball -> SF () Ball
+bouncingBall2 :: forall x. Ball -> SF x Ball
 bouncingBall2 b = switchWhen (bouncingBall1 b) detectWall f
   where
     detectWall :: SF Ball (Event Ball)
@@ -123,11 +123,11 @@ bouncingBall2 b = switchWhen (bouncingBall1 b) detectWall f
         p :: Ball -> Bool
         p b1 = (vector2X (pos b1) <= radius b1) || (vector2X (pos b1) >= 1 - radius b1)
 
-    f :: Ball -> SF () Ball
+    f :: Ball -> SF x Ball
     f b2 = bouncingBall2 (negateXVel b2)
 
 -- | Construct a list of bouncing balls from a list of initial ball configurations.
-bouncingBalls :: [Ball] -> SF () [Ball]
+bouncingBalls :: [Ball] -> SF x [Ball]
 bouncingBalls bs = parB (map bouncingBall2 bs)
 
 -------------------------------------------------------------------
@@ -165,10 +165,10 @@ scaleScene =
 
 -- Auxillary signal function combinators not provided by the Yampa library.
 
--- | Given a (constant) 'Acceleration', and an initial 'Velocity' and 'Position',
--- | produce a signal function that emits the current 'Velocity' and 'Distance'.
-accelerator :: Acceleration -> Velocity -> Position -> SF () (Position,Velocity)
-accelerator a v0 d0 = constant a >>> imIntegral v0 >>> (imIntegral d0 &&& identity)
+-- | Given an initial 'Velocity' and 'Position', produce a signal function that takes an acceleration and emits
+--   the current 'Velocity' and 'Distance'.
+accelerator :: Velocity -> Position -> SF Acceleration (Position,Velocity)
+accelerator v0 d0 = imIntegral v0 >>> (imIntegral d0 &&& identity)
 
 -- | A variant of 'FRP.Yampa.switch' where the event only depends on the output of the sub-ordinate signal function.
 switchWhen :: SF a b -> SF b (Event e) -> (e -> SF a b) -> SF a b
