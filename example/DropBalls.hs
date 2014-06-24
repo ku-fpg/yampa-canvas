@@ -24,12 +24,9 @@ animateDroppingBalls = reactimateSFinContext detectClick renderScene dropBalls
 
 -- | Detect a mouse click in the canvas.
 detectClick :: Blank.Event -> Canvas (Event Position)
-detectClick ev = return (Event (vector2 0.5 0.5)) -- TODO: placeholder
-                 {-
-                 case ePageXY ev of
+detectClick ev = case ePageXY ev of
                    Nothing     -> return NoEvent
                    Just (x,y)  -> fmap Event (toXYCo (x,y))
-                 -}
 
 -- | Convert a Blank Canvas co-ordinate into a Yampa Position.
 toXYCo :: (Float,Float) -> Canvas Position
