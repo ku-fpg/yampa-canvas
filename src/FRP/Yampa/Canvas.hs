@@ -44,20 +44,11 @@ reactimateSFinContext interpEvent putCanvasOutput sf context =
                             then m
                             else m `orElse` return Nothing
 
-               {-
-               a <- atomically $ opt_block $ do
-                    e <- readTChan (eventQueue context)
-                    return (Just e)
-               -}
-               let bev :: Blank.Event
-                   bev = undefined
-
-               ev <- if True -- if no new blank canvas event has occurred
-                       then return NoEvent
-                       else send context (interpEvent bev)
-
+               opt_e <- atomically $ opt_block $ fmap Just $ readTChan (eventQueue context)
+               ev <- case opt_e of
+                       Nothing -> return NoEvent
+                       Just e  -> send context (interpEvent e)
                t <- clockTick clock
-	       -- print (a,t)
                return (t, Just ev)
 
          putOutput :: Bool -> b -> IO Bool
