@@ -28,44 +28,44 @@ type Clock = IORef UTCTime
 
 -- | A specialisation of 'FRP.Yampa.reactimate' to Blank Canvas.
 --   The arguments are: the Canvas action to get input, the Canvas action to emit output, the signal function to be run, and the device context to use.
-reactimateSFinContext 
-      :: forall a b. 
-	((Float,Float) -> Blank.Event -> a) 
-     -> (b -> Canvas ()) 
-     -> SF a b 
+reactimateSFinContext
+      :: forall a b.
+	(Blank.Event -> Canvas (Event a))
+     -> (b -> Canvas ())
+     -> SF (Event a) b
      -> DeviceContext -> IO ()
-reactimateSFinContext interpInput putCanvasOutput sf context =
+reactimateSFinContext interpEvent putCanvasOutput sf context =
   do clock <- newClock
 
-     let size = (width context, height context)
-
-         getInput0 :: IO a
-         getInput0 = return 
-	 	   $ interpInput size
-		   $ Blank.Event { eMetaKey = False
-		     		 , ePageXY = Nothing
-				 , eType = "init"
-				 , eWhich = Nothing }
-
-         getInput :: Bool -> IO (DTime,Maybe a)
+     let getInput :: Bool -> IO (DTime,Maybe (Event a))
          getInput canBlock =
-            do let opt_block m = 
-                            if canBlock 
+            do let opt_block m =
+                            if canBlock
                             then m
                             else m `orElse` return Nothing
+
+               {-
                a <- atomically $ opt_block $ do
                     e <- readTChan (eventQueue context)
-                    return (Just e) 
+                    return (Just e)
+               -}
+               let bev :: Blank.Event
+                   bev = undefined
+
+               ev <- if True -- if no new blank canvas event has occurred
+                       then return NoEvent
+                       else send context (interpEvent bev)
+
                t <- clockTick clock
-	       print (a,t)
-               return (t,fmap (interpInput size) a)
+	       -- print (a,t)
+               return (t, Just ev)
 
          putOutput :: Bool -> b -> IO Bool
          putOutput changed b = if changed
                                  then renderCanvas context (putCanvasOutput b) >> return False
                                  else return False
 
-     reactimate getInput0 getInput putOutput sf
+     reactimate (return NoEvent) getInput putOutput sf
 
 -- | Start a new clock.
 newClock :: IO Clock

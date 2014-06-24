@@ -17,7 +17,7 @@ main = blankCanvas 3000 animateBouncingBalls
 
 -- | Display an animation of multiple falling balls.
 animateBouncingBalls :: DeviceContext -> IO ()
-animateBouncingBalls = reactimateSFinContext (\ _ _ -> ()) renderScene (bouncingBalls someBalls)
+animateBouncingBalls = reactimateSFinContext (\ _ -> return NoEvent) renderScene (bouncingBalls someBalls)
 
 ---------------------------------------------------
 
@@ -101,8 +101,8 @@ fallingBall b = constant gravity >>> accelerator (vel b) (pos b) >>> arr updateB
     updateBall (p,v) = b { pos = p, vel = v }
 
 -- | Construct a ball that bounces in one dimension from an initial ball configuration.
-bouncingBall1 :: forall x. Ball -> SF x Ball
-bouncingBall1 b = switchWhen (fallingBall b) detectFloor f
+bouncingBall1d :: forall x. Ball -> SF x Ball
+bouncingBall1d b = switchWhen (fallingBall b) detectFloor f
   where
     detectFloor :: SF Ball (Event Ball)
     detectFloor = edgeWhen p
@@ -111,11 +111,11 @@ bouncingBall1 b = switchWhen (fallingBall b) detectFloor f
         p b1 = (vector2Y (pos b1) <= radius b1) || (vector2Y (pos b1) >= 1 - radius b1)
 
     f :: Ball -> SF x Ball
-    f b2 = bouncingBall1 (negateYVel b2)
+    f b2 = bouncingBall1d (negateYVel b2)
 
 -- | Construct a ball that bounces in two dimensions.
-bouncingBall2 :: forall x. Ball -> SF x Ball
-bouncingBall2 b = switchWhen (bouncingBall1 b) detectWall f
+bouncingBall2d :: forall x. Ball -> SF x Ball
+bouncingBall2d b = switchWhen (bouncingBall1d b) detectWall f
   where
     detectWall :: SF Ball (Event Ball)
     detectWall = edgeWhen p
@@ -124,11 +124,11 @@ bouncingBall2 b = switchWhen (bouncingBall1 b) detectWall f
         p b1 = (vector2X (pos b1) <= radius b1) || (vector2X (pos b1) >= 1 - radius b1)
 
     f :: Ball -> SF x Ball
-    f b2 = bouncingBall2 (negateXVel b2)
+    f b2 = bouncingBall2d (negateXVel b2)
 
 -- | Construct a list of bouncing balls from a list of initial ball configurations.
 bouncingBalls :: [Ball] -> SF x [Ball]
-bouncingBalls bs = parB (map bouncingBall2 bs)
+bouncingBalls bs = parB (map bouncingBall2d bs)
 
 -------------------------------------------------------------------
 
