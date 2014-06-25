@@ -9,7 +9,7 @@ import FRP.Yampa
 import FRP.Yampa.Vector2
 
 import FRP.Yampa.Canvas
-import BouncingBalls hiding (main)
+import BouncingBalls hiding (main,renderScene)
 
 ---------------------------------------------------
 
@@ -19,6 +19,16 @@ main = blankCanvas 3000 { events = ["click"] } $ animateDroppingBalls
 -- | Display an animation of multiple falling balls.
 animateDroppingBalls :: DeviceContext -> IO ()
 animateDroppingBalls = reactimateSFinContext detectClick renderScene dropBalls
+
+-- | A Canvas action to render the entire scene.
+renderScene :: [Ball] -> Canvas ()
+renderScene bs = renderInstructions >> scaleScene >> renderBalls bs
+
+-- | A Canvas action to render the instruction text.
+renderInstructions :: Canvas ()
+renderInstructions =
+ do font "20pt Comic Sans MS"
+    fillText ("Click on the canvas to add a ball",50,50)
 
 ---------------------------------------------------
 
@@ -40,7 +50,7 @@ toXYCo (i,j) =
 
 -- | Construct a bouncing ball model that allows responds to input events by adding new balls.
 dropBalls :: SF (Event Position) [Ball]
-dropBalls = ballGenerator >>> ballCollection [bouncingBall2d ball1]
+dropBalls = ballGenerator >>> ballCollection []
 
 -- | A collection of active balls into which new balls can be dropped.
 ballCollection :: [SF (Event Ball) Ball] -> SF (Event Ball) [Ball]
@@ -48,7 +58,7 @@ ballCollection bs = notYet >>> pSwitchB bs (arr fst) (\ sfs b -> ballCollection 
 
 -- | Convert events carrying co-ordinates into events carrying new balls.
 ballGenerator :: SF (Event Position) (Event Ball)
-ballGenerator = arr $ fmap newBallAt
+ballGenerator = arr (fmap newBallAt)
 
 -- | Create a new ball of the specified colour, at the specified co-ordinates.
 newBallAt :: Position -> Ball

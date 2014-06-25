@@ -48,6 +48,7 @@ reactimateSFinContext interpEvent putCanvasOutput sf context =
                ev <- case opt_e of
                        Nothing -> return NoEvent
                        Just e  -> send context (interpEvent e)
+
                t <- clockTick clock
                return (t, Just ev)
 

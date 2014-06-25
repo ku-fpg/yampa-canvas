@@ -21,7 +21,6 @@ animateBouncingBalls = reactimateSFinContext (\ _ -> return NoEvent) renderScene
 
 ---------------------------------------------------
 
--- We scale such that 0.0 and 1.0 denote the edges of the canvas.
 type Radius = Float
 
 type Acceleration = Vector2 Float
