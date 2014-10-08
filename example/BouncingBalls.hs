@@ -21,11 +21,11 @@ animateBouncingBalls = reactimateSFinContext (\ _ -> return NoEvent) renderScene
 
 ---------------------------------------------------
 
-type Radius = Float
+type Radius = Double
 
-type Acceleration = Vector2 Float
-type Velocity     = Vector2 Float
-type Position     = Vector2 Float
+type Acceleration = Vector2 Double
+type Velocity     = Vector2 Double
+type Position     = Vector2 Double
 
 type Colour = Text
 

@@ -39,7 +39,7 @@ detectClick ev = case ePageXY ev of
                    Just (x,y)  -> fmap Event (toXYCo (x,y))
 
 -- | Convert a Blank Canvas co-ordinate into a Yampa Position.
-toXYCo :: (Float,Float) -> Canvas Position
+toXYCo :: (Double,Double) -> Canvas Position
 toXYCo (i,j) =
   do context <- myCanvasContext
      let w = width context
