@@ -30,7 +30,7 @@ type Clock = IORef UTCTime
 --   The arguments are: the Canvas action to get input, the Canvas action to emit output, the signal function to be run, and the device context to use.
 reactimateSFinContext
       :: forall a b.
-	(Blank.Event -> Canvas (Event a))
+        (Blank.Event -> Canvas (Event a))
      -> (b -> Canvas ())
      -> SF (Event a) b
      -> DeviceContext -> IO ()
