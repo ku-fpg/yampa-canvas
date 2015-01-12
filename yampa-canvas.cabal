@@ -1,5 +1,5 @@
 name:                yampa-canvas
-version:             0.2
+version:             0.2.1
 synopsis:            blank-canvas frontend for yampa
 license:             BSD3
 license-file:        LICENSE
@@ -8,7 +8,7 @@ maintainer:          andygill@ku.edu
 copyright:           Copyright (c) 2014 The University of Kansas
 category:            Graphics
 build-type:          Simple
-extra-source-files:  README.md
+extra-source-files:  CHANGELOG.md, README.md
 cabal-version:       >=1.10
 
 library
