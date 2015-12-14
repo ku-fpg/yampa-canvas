@@ -1,6 +1,7 @@
 name:                yampa-canvas
 version:             0.2.2
-synopsis:            blank-canvas frontend for yampa
+synopsis:            blank-canvas frontend for Yampa
+description:         @blank-canvas@ frontend for @Yampa@
 license:             BSD3
 license-file:        LICENSE
 author:              Neil Sculthorpe
@@ -11,6 +12,10 @@ build-type:          Simple
 extra-source-files:  CHANGELOG.md, README.md
 tested-with:         GHC == 7.8.4, GHC == 7.10.3
 cabal-version:       >=1.10
+
+source-repository head
+  type:                git
+  location:            https://github.com/ku-fpg/yampa-canvas
 
 library
   exposed-modules:     FRP.Yampa.Canvas
