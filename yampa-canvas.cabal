@@ -10,7 +10,12 @@ copyright:           Copyright (c) 2014 The University of Kansas
 category:            Graphics
 build-type:          Simple
 extra-source-files:  CHANGELOG.md, README.md
-tested-with:         GHC == 7.8.4, GHC == 7.10.3, GHC == 8.0.2, GHC == 8.2.2, GHC == 8.4.3
+tested-with:         GHC == 7.8.4
+                   , GHC == 7.10.3
+                   , GHC == 8.0.2
+                   , GHC == 8.2.2
+                   , GHC == 8.4.3
+                   , GHC == 8.6.1
 cabal-version:       >=1.10
 
 source-repository head
@@ -22,7 +27,7 @@ library
   other-extensions:    ScopedTypeVariables
   build-depends:       base            >= 4.7   && < 4.12,
                        blank-canvas    >= 0.5   && < 0.7,
-                       stm             == 2.4.*,
+                       stm             >= 2.4   && < 2.6,
                        time            >= 1.4   && < 1.9,
                        Yampa           >= 0.9.6 && < 0.12
   hs-source-dirs:      src
