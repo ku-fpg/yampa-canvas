@@ -5,8 +5,8 @@ module BouncingBalls where
 -- set browser to: http://localhost:3000/
 import Graphics.Blank hiding (Event)
 import FRP.Yampa
-import FRP.Yampa.Vector2
 import Data.Text(Text)
+import Data.Vector2
 
 import FRP.Yampa.Canvas
 

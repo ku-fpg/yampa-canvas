@@ -3,10 +3,10 @@
 module Main where
 
 -- set browser to: http://localhost:3000/
+import Data.Vector2
 import Graphics.Blank hiding (Event)
 import qualified Graphics.Blank as Blank
 import FRP.Yampa
-import FRP.Yampa.Vector2
 
 import FRP.Yampa.Canvas
 import BouncingBalls hiding (main,renderScene)

@@ -1,3 +1,7 @@
+## next [????.??.??]
+* Require building the `yampa-canvas-bouncing-balls` example with `Yampa-0.13`
+  (and `simple-affine-space-0.1`, as a result).
+
 ## 0.2.2
 * Allow building with `blank-canvas-0.6` and `Yampa-0.10`
 
