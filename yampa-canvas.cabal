@@ -1,5 +1,5 @@
 name:                yampa-canvas
-version:             0.2.2
+version:             0.2.3
 synopsis:            blank-canvas frontend for Yampa
 description:         @blank-canvas@ frontend for @Yampa@
 license:             BSD3

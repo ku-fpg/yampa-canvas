@@ -1,4 +1,5 @@
-## next [????.??.??]
+## 0.2.3 [2018.11.03]
+* Allow building the `yampa-canvas` library with `Yampa-0.13`.
 * Require building the `yampa-canvas-bouncing-balls` example with `Yampa-0.13`
   (and `simple-affine-space-0.1`, as a result).
 
