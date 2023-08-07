@@ -31,7 +31,7 @@ source-repository head
 library
   exposed-modules:     FRP.Yampa.Canvas
   other-extensions:    ScopedTypeVariables
-  build-depends:       base            >= 4.7   && < 4.19,
+  build-depends:       base            >= 4.7   && < 4.20,
                        blank-canvas    >= 0.5   && < 0.8,
                        stm             >= 2.4   && < 2.6,
                        time            >= 1.4   && < 1.13,
@@ -48,7 +48,7 @@ executable yampa-canvas-bouncing-balls
     buildable:	       True
   else
     buildable:	       False
-  build-depends:       base                >= 4.7  && < 4.19,
+  build-depends:       base                >= 4.7  && < 4.20,
                        blank-canvas        >= 0.5  && < 0.8,
                        simple-affine-space >= 0.1  && < 0.3,
                        text                >= 1.1  && < 2.1,
