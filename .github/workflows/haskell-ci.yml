@@ -215,6 +215,8 @@ jobs:
           if [ $((HCNUMVER >= 90000)) -ne 0 ] ; then echo "package yampa-canvas" >> cabal.project ; fi
           if [ $((HCNUMVER >= 90000)) -ne 0 ] ; then echo "    ghc-options: -Werror=incomplete-patterns -Werror=incomplete-uni-patterns" >> cabal.project ; fi
           cat >> cabal.project <<EOF
+          allow-newer: Yampa:random
+
           package yampa-canvas
             flags: +example
           EOF

@@ -2,3 +2,7 @@ packages: .
 
 package yampa-canvas
   flags: +example
+
+-- TODO: Remove this once https://github.com/ivanperez-keera/Yampa/issues/324
+-- is fixed
+allow-newer: Yampa:random
